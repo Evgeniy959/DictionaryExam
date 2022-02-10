@@ -10,10 +10,6 @@ namespace Dictionary
             var exit = false;
             var dictionaryRus = new Dictionary<string, List<string>>();
             //var dictionaryEng = new Dictionary<string, List<string>>();
-            //string filePath = null;
-            string filePath = "Rus.txt";
-            //Methods.Read(filePath, dictionaryRus);
-            //Methods.PrintDictionary(dictionaryRus);
 
             Show.Menu();
             var selectType = Console.ReadLine();
@@ -38,7 +34,6 @@ namespace Dictionary
                             Methods.FindRus(dictionaryRus);
                             break;*/
                         case "5": // 5. Показать весь словарь
-                            //Methods.Read(filePath, dictionaryRus);
                             Methods.PrintDictionary(dictionaryRus);
                             break;
                         /*case "6": //6.Сохранить в отдельный файл результата 

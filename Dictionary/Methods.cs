@@ -14,11 +14,21 @@ namespace Dictionary
             var exit = false;
             var flagAdd = false;
             var word = Show.Word();
+            foreach (var element in dictionary)
+            {
+                if (element.Key == word)
+                {
+                    throw new Exception($"Слово уже существует : {element.Key}");
+                    //Show.PrintLn("Слово уже существует");
+                }
+                //break;                
+            }
             var listTranslations = new List<string>();            
             var translate = Show.Translation();
             listTranslations.Add(translate);
-            var listcopy = listTranslations;
+            //var listCopy = listTranslations;
             dictionary.Add(word, listTranslations);
+            //dictionary.Add(word, translate);
             do
             {
                 Show.Smenu();
@@ -26,14 +36,14 @@ namespace Dictionary
                 switch (select)
                 {
                      case "1": // 1. Добавить перевод
-                        translate = Console.ReadLine();
+                        translate = Show.Translation(); 
                         foreach (var element in dictionary)
                         {
                             foreach (var translation in element.Value)
                             {
                                 if (translation == translate && element.Key == word)
                                 {
-                                    throw new Exception($"В словаре уже существует перевод : {translation}");
+                                    throw new Exception($"Слово c данным переводом уже существует : {translation}");
                                     //Show.PrintLn("Слово c данным переводом уже существует");
                                     flagAdd = true;
                                 }
@@ -41,9 +51,11 @@ namespace Dictionary
                         }                   
                         if (!flagAdd)
                         {
-                            dictionary.Remove(word);
-                            listcopy.Add(translate);
-                            dictionary.Add(word, listcopy);
+                            /*dictionary.Remove(word);
+                            listCopy.Add(translate);
+                            dictionary.Add(word, listCopy);*/
+
+                            dictionary[word].Add(translate);
                         }
                         break;
                     case "2": // 2. Возврат в подменю
@@ -51,30 +63,18 @@ namespace Dictionary
                         break;
                 }
             } while (!exit);
-
-
         }
-        /*public static void AddEng(Dictionary<string, string> dictionaryEng)
-        {
-            var flagAdd = false;
-            var english = Show.WordName("Добавьте английское слово ");
-            var russian = Show.WordName("Введите перевод ");
-            foreach (var element in dictionaryEng)
-            {
-                if (element.Value == english && element.Key == russian)
-                {
-                    Show.PrintLn("Слово c данным переводом уже существует");
-                    flagAdd = true;
-                }
-            }
-            if (!flagAdd)
-            {
-                dictionaryEng.Add(russian, english);
-            }
-        }*/
+        
         public static void AddFile(Dictionary<string, List<string>> dictionary)
         {
-            Add(dictionary);
+            try
+            {
+                Add(dictionary);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             ImportToFile(dictionary);
         }
         /*public static void AddResFileRus()
@@ -208,22 +208,8 @@ namespace Dictionary
             }
             file.Close();
         }
-        /*static (string key, string value) SplitStr(string str, char delimiter)
-        {
-            var temp = str.Split(delimiter);
-            var key = temp[0];
-            var value = temp[1];
-            return (key, value);
-        }*/
-        public static Dictionary<string, List<string>> Read(string filePath, Dictionary<string, List<string>> dictionary)
-        {
-            //filePath = $"Rus.txt";
-            var jsonString = File.ReadAllText(filePath);
-            //var dictionary = new Dictionary<string, List<string>>();
-            return dictionary = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, List<string>>>(jsonString);
-            //return dictionary = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(jsonString);
-        }
-        public static void ImportToFileEdit(Dictionary<string, string> dictionary)
+        
+        /*public static void ImportToFileEdit(Dictionary<string, string> dictionary)
         {
             //var file = new StreamWriter(Show.Failname(), false);
             var file = new StreamWriter("Rus.txt", false);
@@ -232,19 +218,9 @@ namespace Dictionary
                 file.WriteLine($"{element.Key} - {element.Value}");
             }
             file.Close();
-        }
+        }*/
         public static void PrintDictionary(Dictionary<string, List<string>> dictionary)
-        {
-            /*var keys = dictionary.Keys.ToList();
-            foreach (var element in keys)
-            {
-                Console.WriteLine($"{element} - {dictionary[element]}");
-            }*/
-            //var keys = dictionary.Keys.ToList();
-            /*foreach (var element in dictionary)
-            {
-                Console.WriteLine($"{element.Key} - {element.Value[0]}");
-            }*/
+        {            
             Console.WriteLine();
             foreach (var element in dictionary)
             {
